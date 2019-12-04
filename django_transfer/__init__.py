@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import os
 import shutil
@@ -70,7 +70,7 @@ def get_header_value(path):
         except AttributeError:
             raise ImproperlyConfigured('Please specify settings.TRANSFER_MAPPINGS')
         found = False
-        for root, location in mappings.items():
+        for root, location in list(mappings.items()):
             if path.startswith(root):
                 found = True
                 path = os.path.relpath(path, root).strip('/')
@@ -127,7 +127,7 @@ class TransferMiddleware(MiddlewareMixin):
         # We will build a unique list of the __original_field_name__'s we find
         # that contain a valid __attribute__ name.
         fields = set()
-        for name in request.POST.keys():
+        for name in list(request.POST.keys()):
             field, bracket, attr = name.partition('[')
             if attr in ('filename]', 'path]', 'size]', 'content_type]'):
                 fields.add(field)

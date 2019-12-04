@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from tempfile import gettempdir
 
 import os
@@ -33,7 +33,7 @@ class Settings(object):
     def __init__(self, settings, **kwargs):
         self.restore = {}
         self.settings = settings
-        for name, value in kwargs.items():
+        for name, value in list(kwargs.items()):
             self.restore[name] = getattr(settings, name, Settings.Missing)
             if value is Settings.Missing:
                 if hasattr(settings, name):
@@ -45,7 +45,7 @@ class Settings(object):
         return self
 
     def __exit__(self, *args):
-        for name, value in self.restore.items():
+        for name, value in list(self.restore.items()):
             if value is Settings.Missing:
                 if hasattr(self.settings, name):
                     delattr(self.settings, name)

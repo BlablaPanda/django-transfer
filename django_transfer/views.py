@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import os
 import json
@@ -28,7 +28,7 @@ def upload(request):
         'fields': fields,
     }
     if request.method == 'POST':
-        for name in request.FILES.keys():
+        for name in list(request.FILES.keys()):
             data = request.FILES.getlist(name)
             if len(data) == 1:
                 file = data[0]
@@ -45,6 +45,6 @@ def upload(request):
                     'content-type': file.content_type,
                     'data': file.read().decode(),
                 } for file in data]
-        for name, value in request.POST.items():
+        for name, value in list(request.POST.items()):
             fields[name] = value
     return HttpResponse(json.dumps(echo), content_type='application/json')
